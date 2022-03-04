@@ -1,0 +1,28 @@
+dto:
+    tiles : list[Tile]
+    source : Player
+    enemy : Player
+    daysTillRain : number
+
+Tile:
+    x: number
+    y: number
+    bIsPlanted: bool
+    bIsSpecial: bool
+    plantDTO: Plant
+
+Player:
+    points: number / score
+    gold: number
+    fertilizerActive: bool
+    tiles: list[Tile]
+    cards: list[Card]
+
+Plant:
+    plantId: number / foreach type
+    goldWorth: number
+    waterNeeded: number
+
+Card:
+    cardId: number/base on card type
+    owned: number

@@ -1,0 +1,51 @@
+def buy(self):
+        need = len(self.me.tiles)
+        to_spend = self.me.gold
+        action = InputAction("C", [])
+        buy_list = []
+        i = 0
+        while to_spend > 0 and need > 0 and i < 4:
+            if to_spend > WATER_COST_TABLE[i]:
+                n = to_spend // WATER_COST_TABLE[i]
+                buy_list.append(
+                    Action(cardid=index_to_plant_id(i), amount=min(n, need)))
+                buy_list.append(
+                    Action(cardid=WATER_ID, amount=min(n, need)*WATER_TABLE[i]))
+                to_spend -= (WATER_COST_TABLE[i]*min(n, need))
+                need -= min(n, need)
+                if n > need:
+                    break
+            i += 1
+        self.loop += 1
+        action.Properties = buy_list
+        return action
+
+def buy_tiles(self, numb):
+        cant_buy = self.my_tiles.union(self.opponent_tiles)
+        my_tiles = set(self.my_tiles)
+        bought = []
+        # Get all nei that can be bought
+        # find best and buy it
+        # repeat
+        for tile in self.me.tiles:
+            my_tiles.add(Pos(tile.x, tile.y))
+            cant_buy.add(Pos(tile.x, tile.y))
+        for tile in self.opponent.tiles:
+            cant_buy.add(Pos(tile.x, tile.y))
+        for i in range(numb):
+            b = False
+            for k in list(my_tiles):
+                neighbors = self.map_state.get_neighbors(k)
+                for n in neighbors:
+                    if n.pos not in cant_buy:
+                        bought.append(n.pos)
+                        my_tiles.add(n.pos)
+                        cant_buy.add(n.pos)
+                        b = True
+                    if b:
+                        break
+                if b:
+                    break
+            if not b:
+                break
+        return bought
